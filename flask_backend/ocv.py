@@ -4,6 +4,7 @@ import numpy
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import os
 
 def calculateSpots(width,height, y, x, url):
     i = 0
@@ -19,13 +20,15 @@ def calculateSpots(width,height, y, x, url):
     inp = cv2.resize(img, (width, height))
 
     rgb = cv2.cvtColor(inp, cv2.COLOR_BGR2RGB)
+    
     rgb_tensor = tf.convert_to_tensor(rgb, dtype=tf.uint8)
+    
     rgb_tensor = tf.expand_dims(rgb_tensor, 0)
-
+    
     detector = hub.load(
-        "https://tfhub.dev/tensorflow/efficientdet/lite2/detection/1")
+        os.path.abspath('./flask_backend/model/'))
 
-    labels = pd.read_csv('C:/Users/kfryg/Desktop/client/cv2/model/labels.csv', sep=';', index_col='ID')
+    labels = pd.read_csv(os.path.abspath('./flask_backend/model/labels.csv'), sep=';', index_col='ID')
     labels = labels['OBJECT (2017 REL.)']
 
     boxes, scores, classes, num_detections = detector(rgb_tensor)
@@ -55,6 +58,5 @@ def calculateSpots(width,height, y, x, url):
     return i
 
 if __name__ == '__main__':
-    # run app in debug mode on port 5000
     print(calculateSpots(1920,1080, 300, 0, 'https://imageserver.webcamera.pl/rec/lanckorona/latest.mp4'))
     
