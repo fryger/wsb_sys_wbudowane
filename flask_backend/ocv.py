@@ -38,7 +38,7 @@ def calculateSpots(width,height, y, x, url):
     for score, (ymin, xmin, ymax, xmax), label in zip(pred_scores, pred_boxes, pred_labels):
         if score < 0.3:
             continue
-        if label == 'car' or label == 'bus' or label == 'motorcycle':
+        if label == 'car' or label == 'bus' or label == 'motorcycle' or label == 'truck':
             i+=1
     
         score_txt = f'{100 * round(score)}%'

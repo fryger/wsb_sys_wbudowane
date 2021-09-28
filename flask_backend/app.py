@@ -9,15 +9,37 @@ from tinydb import TinyDB, Query
 from apscheduler.schedulers.background import BackgroundScheduler
 from mailer import *
 from schedul import *
+import cv2
 
-# create the Flask app
+
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 CORS(app)
 cors = CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:3000"}})
+
 sched = BackgroundScheduler(daemon=True)
+
+
 
 db = TinyDB('./db.json')
 
+def gen_frames():  
+    camera = cv2.VideoCapture(0)
+    while True:
+        success, frame = camera.read() 
+        if not success:
+            break
+        else:
+            if frame is not None:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  
+
+@app.route('/video_feed', methods=["GET"])
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/email', methods=['GET'])
 def get_email_config(): 

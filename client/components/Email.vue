@@ -4,7 +4,7 @@
       >Email configuration</v-expansion-panel-header
     >
     <v-expansion-panel-content>
-      <v-form class="ma-3" ref="form" v-model="valid" lazy-validation>
+      <v-form class="ma-3" ref="form" lazy-validation>
         <v-text-field
           label="Sender"
           outlined
