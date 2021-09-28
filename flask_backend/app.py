@@ -100,7 +100,7 @@ def set_spot_config():
    
     # sched.add_job(calculate_spots,'interval',minutes=3)
     sched.remove_all_jobs()
-    sched.add_job(calculate_spots,'cron',hour=scheduleTime.split(':')[0], minute=scheduleTime.split(':')[1], id='spot_job')
+    sched.add_job(report,'cron',hour=scheduleTime.split(':')[0], minute=scheduleTime.split(':')[1], id='spot_job')
     try:
         sched.start()
     except:

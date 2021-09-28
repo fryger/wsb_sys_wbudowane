@@ -7,7 +7,7 @@ from mailer import *
 db = TinyDB('./db.json')
 
 
-def calculate_spots():
+def report():
     table = db.table('Task')   
     task = table.all()[0]
     value = int(task['spots']) - calculateSpots(int(task['width']),int(task['height']), int(task['top']), int(task['left']),task['url'])
